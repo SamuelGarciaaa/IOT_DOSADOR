@@ -1,0 +1,37 @@
+{% extends "/base.html" %}
+
+{% block title %} Connect {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="/static/css/connect.css">
+{% endblock %}
+
+{% block content %}
+    <!-- ERROR AREA -->
+
+    {% if error %}
+        <div class="error-area container">
+            <p class="alert alert-danger text-center mt-5" role="alert">{{ error }}</p>
+        </div>
+    {% endif %}
+
+    <div class="main-form container">
+
+        <!-- FORM AREA -->
+        <form action="/inputCode" method="POST">
+            <div class="form-floating mt-5">
+                <input type="text" name="token" class="form-control" placeholder="Entre com o token...">
+                <label for="token">Código de pareamento</label>
+            </div>
+    
+            <div class="send-data-area mt-5">
+                <button class="btn btn-success">Submit</button>
+                <button class="btn btn-danger">Cancel</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/js/connect.js"></script>
+{% endblock %}

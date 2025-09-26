@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} IOT - DOSADOR {% endblock %}</title>
+
+    <!-- CSS IMPORTS -->
+
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+
+    {% block styles %}{% endblock %}
+</head>
+<body class="">
+    {% block content %}
+        <!-- Template here -->
+    {% endblock %}
+
+<!-- JS IMPORTS -->
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>
