@@ -7,7 +7,59 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Still under development</h1>
+    <div class="main-form container mt-5 d-flex flex-column justify-content-center align-items-center">
+        <p class="h1 text-center" id="login_register_title">Criar uma conta</p>
+
+        <form action="/login_register" method="POST" class="w-50">
+            <!-- Variável para falar o que estamos usando -->
+            <input type="hidden" name="variableToTellWhatWeAreUsing" id="variableToTellWhatWeAreUsing" value="register">
+
+            <div class="step-1" id="step1">
+                <!-- Passo 1 do formulário - Criação do usuário -->
+
+                <div class="form-floating mb-3 mt-3">
+                    <input type="text" name="nome" id="nome" placeholder="Nome" class="form-control">
+                    <label for="nome">Nome</label>
+                </div>
+    
+                <div class="form-floating mb-3 mt-3" id="hide-area">
+                    <input type="text" name="tel" id="tel" placeholder="Telefone" class="form-control">
+                    <label for="tel">Telefone</label>
+                </div>
+    
+                <div class="form-floating mb-3 mt-3">
+                    <input type="text" name="senha" id="senha" placeholder="Senha" class="form-control">
+                    <label for="senha">Senha do usuário</label>
+                </div>
+            </div>
+
+            <!-- Botão de enviar para o login -->
+            <div class="div-enviar-login d-none" id="hide-enviar-login">
+                <button class="btn btn-success">Enviar</button>
+            </div>
+
+            <!-- 'Envio' do primeiro formulário -->
+            <div class="next" id="next">
+                <button class="btn btn-success" id="next" onclick="step(2, event)">Próximo</button>
+            </div>
+
+            <div class="step-2 d-none" id="step2">
+                <!-- Passo 2 do formulário - Ajustar os horários -->
+
+                <p class="h2">Por favor, selecione seus horários de remédios.</p>
+
+                <!-- Still under development -->
+
+                <div class="submit-area" id="submit-area">
+                    <button class="btn btn-success" id="next">Enviar</button>
+                    <button class="btn btn-warning" id="back" onclick="step(1, event)">Voltar</button>
+                    <button class="btn btn-danger" type="reset">Limpar campos</button>
+                </div>
+            </div>
+        </form>
+
+        <button onclick="trocar_texto()" id="p_trocar" class="btn-link btn mt-3 mt-3">Já tem uma conta? Faça login</button>
+    </div>
 {% endblock %}
 
 {% block scripts %}

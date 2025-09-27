@@ -1,7 +1,15 @@
-from flask import Flask, render_template, request, jsonify
-import time
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+import time, os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__, template_folder='templates')
+app.secret_key = os.getenv('SECRET_KEY')
+
+#Functions
+def banco():
+    pass
 
 codes = {}
 
@@ -27,38 +35,40 @@ def api():
 
 @app.route('/inputCode', methods=['POST'])
 def inputToken():
-    error = None
-    inputTokenTyped = request.form.get('token')
+    if request.method == 'POST':
+        error = None
+        inputTokenTyped = request.form.get('token')
 
-    if inputTokenTyped and inputTokenTyped.strip():
-        #Tem algo na variável
+        if inputTokenTyped and inputTokenTyped.strip():
+            #Tem algo na variável
 
-        if inputTokenTyped in codes:
-            #Código existe
+            if inputTokenTyped in codes:
+                #Código existe
 
-            now = time.time()
-            timestamp = codes[inputTokenTyped]
-            
-            #60 segundos = 1 minuto
-            if now - timestamp > 60:
-                #Erro, código expirou
-                error = 'Erro! Tempo expirado!'
-                return render_template('connect.html', error=error)
-            
+                now = time.time()
+                timestamp = codes[inputTokenTyped]
+                
+                #60 segundos = 1 minuto
+                if now - timestamp > 60:
+                    #Erro, código expirou
+                    error = 'Erro! Tempo expirado!'
+                    return render_template('connect.html', error=error)
+                
+                else:
+                    #Envia para a página de criação de usuário
+                    session['pareado'] = True
+                    return render_template('login_register.html')
+
             else:
-                #Envia para a página de criação de usuário
-                return render_template('login_register.html')
+                #Erro
+                error = 'Erro! Código não encontrado!'
+                return render_template('connect.html', error=error)
 
         else:
-            #Erro
-            error = 'Erro! Código não encontrado!'
+            #Deu erro
+            error = 'Erro! Digite um código válido!'
+
             return render_template('connect.html', error=error)
-
-    else:
-        #Deu erro
-        error = 'Erro! Digite um código válido!'
-
-        return render_template('connect.html', error=error)
 
 @app.route('/login_register')
 def login_register():
@@ -66,7 +76,11 @@ def login_register():
 
 @app.route('/')
 def index():
-    return render_template('connect.html')
+    if session.get('pareado') is True:
+        return render_template('login_register.html')
+        
+    else:
+        return render_template('connect.html')
 
 if __name__ == '__main__':
     app.run(debug = True, host="0.0.0.0", port = 5000)
