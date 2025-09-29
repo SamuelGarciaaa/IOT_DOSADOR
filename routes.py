@@ -7,6 +7,9 @@ from functions import *
 #Dicionário pra guardar os códigos
 codes = {}
 
+#Gambiarra para usar sem o esp32
+codes = {'oi' : time.time()}
+
 @app.route('/data', methods=['POST'])
 def api():
     try:
@@ -90,7 +93,8 @@ def login_register():
 
                 if deuCerto == True:
                     #User area = Área do usuário com os horários e coisas para editar
-                    return render_template('userArea.html', nome=nome)
+                    session['nome'] = nome
+                    return render_template('userArea.html')
                 
                 elif deuCerto == False:
                     error = 'Já existe um usuário com esse nome!'
@@ -108,10 +112,17 @@ def login_register():
             #Opção logar
             pass
 
+@app.route('/logout', methods=['POST'])
+def logout():
+    pass
+
 @app.route('/')
 def index():
     #Já conectou a maleta
     if session.get('pareado') is True:
+        if session.get('nome'):
+            return render_template('userArea.html')
+
         return render_template('login_register.html')
         
     #Não conectou a maleta ainda
