@@ -8,40 +8,175 @@
 
 {% block content %}
     <header>
-        <div class="header row d-flex align-items-center">
-            <div class="logo col">
-                <!-- Logo -->
-                <img src="/static/img/2maletaMedicaIOT-150x150-removebg-preview.png" alt="Logo">
-            </div>
-        </div>
+
     </header>
 
     <main>
+        {% if session['temHorarios'] %}
+            <!-- Mostrar os horários de remédio puxando do banco de dados -->
 
+
+        {% else %}
+            <div class="main">
+                <!-- Mostrar opção para adicionar horários de remédios -->
+                <p class="h3 text-center mt-5">Adicione um horário para seus remédios</p>
+    
+                <div class="add-remedios container mt-5 w-25">
+                    <form action="/remedios" method="POST">
+                        <div class="remedio">
+                            <div class="horarios">
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="h4 mb-3 horario-p">Remédio 1:</p>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="form-check form-switch d-flex justify-content-center gap-2 align-items-center">
+                                            <input class="form-check-input" type="checkbox" name="ativar" value="yes" checked>
+                                            <label class="form-check-label" for="mySwitch">Ativar</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nome-remedio form-floating mt-3 mb-3">
+                                    <input type="text" name="nome_remedio[0]" class="form-control">
+                                    <label for="nome-remedio">Nome do remédio</label>
+                                </div>
+
+                                <div class="horario1 form-floating">
+                                    <input type="time" name="remedio[0][]" class="form-control">
+                                    <label for="horario1">Primeiro horário:</label>
+                                </div>
+
+                                <div class="horario2 form-floating mt-3 mb-3">
+                                    <input type="time" name="remedio[0][]" class="form-control">
+                                    <label for="horario2">Segundo horário:</label>
+                                </div>
+
+                                <div class="horario3 form-floating">
+                                    <input type="time" name="remedio[0][]" class="form-control">
+                                    <label for="horario3">Terceiro horário:</label>
+                                </div>
+                            </div>
+
+                            <div class="horarios mt-5">
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="h4 mb-3 horario-p">Remédio 2:</p>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="form-check form-switch d-flex justify-content-center gap-2 align-items-center">
+                                            <input class="form-check-input" type="checkbox" name="ativar" value="yes">
+                                            <label class="form-check-label" for="mySwitch">Ativar</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nome-remedio form-floating mt-3 mb-3">
+                                    <input type="text" name="nome_remedio[1]" class="form-control">
+                                    <label for="nome-remedio">Nome do remédio</label>
+                                </div>
+
+                                <div class="horario1 form-floating">
+                                    <input type="time" name="remedio[1][]" class="form-control">
+                                    <label for="horario1">Primeiro horário:</label>
+                                </div>
+
+                                <div class="horario2 form-floating mt-3 mb-3">
+                                    <input type="time" name="remedio[1][]" class="form-control">
+                                    <label for="horario2">Segundo horário:</label>
+                                </div>
+
+                                <div class="horario3 form-floating">
+                                    <input type="time" name="remedio[1][]" class="form-control">
+                                    <label for="horario3">Terceiro horário:</label>
+                                </div>
+                            </div>
+
+                            <div class="horarios mt-5">
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="h4 mb-3 horario-p">Remédio 3:</p>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="form-check form-switch d-flex justify-content-center gap-2 align-items-center">
+                                            <input class="form-check-input" type="checkbox" name="ativar" value="yes">
+                                            <label class="form-check-label" for="mySwitch">Ativar</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nome-remedio form-floating mt-3 mb-3">
+                                    <input type="text" name="nome_remedio[2]" class="form-control">
+                                    <label for="nome-remedio">Nome do remédio</label>
+                                </div>
+
+                                <div class="horario1 form-floating">
+                                    <input type="time" name="remedio[2][]" class="form-control">
+                                    <label for="horario1">Primeiro horário:</label>
+                                </div>
+
+                                <div class="horario2 form-floating mt-3 mb-3">
+                                    <input type="time" name="remedio[2][]" class="form-control">
+                                    <label for="horario2">Segundo horário:</label>
+                                </div>
+
+                                <div class="horario3 form-floating">
+                                    <input type="time" name="remedio[2][]" class="form-control">
+                                    <label for="horario3">Terceiro horário:</label>
+                                </div>
+                            </div>
+
+                            <div class="horarios mt-5">
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="h4 mb-3 horario-p">Remédio 4:</p>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="form-check form-switch d-flex justify-content-center gap-2 align-items-center">
+                                            <input class="form-check-input" type="checkbox" name="ativar" value="yes">
+                                            <label class="form-check-label" for="mySwitch">Ativar</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nome-remedio form-floating mt-3 mb-3">
+                                    <input type="text" name="nome_remedio[3]" class="form-control">
+                                    <label for="nome-remedio">Nome do remédio</label>
+                                </div>
+
+                                <div class="horario1 form-floating">
+                                    <input type="time" name="remedio[3][]" class="form-control">
+                                    <label for="horario1">Primeiro horário:</label>
+                                </div>
+
+                                <div class="horario2 form-floating mt-3 mb-3">
+                                    <input type="time" name="remedio[3][]" class="form-control">
+                                    <label for="horario2">Segundo horário:</label>
+                                </div>
+
+                                <div class="horario3 form-floating">
+                                    <input type="time" name="remedio[3][]" class="form-control">
+                                    <label for="horario3">Terceiro horário:</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-submit mt-3 mb-5 d-flex justify-content-center gap-5">
+                            <button class="btn btn-success" type="submit">Enviar horários</button>
+                            <button class="btn btn-danger" type="reset">Limpar campos</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
     </main>
 
     <footer>
-        <div class="footer d-flex justify-content-center">
-            <div class="links-falsos row w-75">
-                <div class="col d-flex flex-column align-items-center p-0">
-                    <a href="#" class="link">Link falso</a>
-                    <a href="#" class="link">Link falso</a>
-                    <a href="#" class="link">Link falso</a>
-                </div>
 
-                <div class="col d-flex flex-column align-items-center p-0">
-                    <a href="#" class="link">Link falso</a>
-                    <a href="#" class="link">Link falso</a>
-                    <a href="#" class="link">Link falso</a>
-                </div>
-
-                <div class="col d-flex flex-column align-items-center p-0">
-                    <a href="#" class="link">Link falso</a>
-                    <a href="#" class="link">Link falso</a>
-                    <a href="#" class="link">Link falso</a>
-                </div>
-            </div>
-        </div>
     </footer>
 {% endblock %}
 

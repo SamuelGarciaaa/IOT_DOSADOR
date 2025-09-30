@@ -14,6 +14,21 @@ def banco(nome, senha, metodo, tel=None):
         )
     ''')
 
+    #Se sobrar tempo, colocar quantidade
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS remedios(
+            id_remedio INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            id_dono INTEGER NOT NULL,
+            hora1 TEXT,
+            hora2 TEXT,
+            hora3 TEXT,
+            
+            FOREIGN KEY (id_dono) REFERENCES usuarios(id)
+        )
+    ''')
+
     if metodo == 'cadastro':
         #Verifica se já existe
         cursor.execute('SELECT * FROM usuarios WHERE nome = ?', (nome,))
@@ -32,4 +47,11 @@ def banco(nome, senha, metodo, tel=None):
         return True
 
     elif metodo == 'login':
-        pass
+        cursor.execute('SELECT * FROM usuarios WHERE nome = ? AND senha = ?', (nome, senha))
+
+        if cursor.fetchone():
+            conn.close()
+            return True
+        
+        else:
+            return False

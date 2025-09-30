@@ -72,7 +72,7 @@ def inputToken():
 
 @app.route('/login_register', methods=['POST'])
 def login_register():
-    if(request.method == 'POST'):
+    if request.method == 'POST':
         #Erro
         error = None
 
@@ -110,10 +110,35 @@ def login_register():
 
         else:
             #Opção logar
-            pass
+            if nome and nome.strip() and senha and senha.strip():
+                #Preencheu tudo
+
+                deuCerto = banco(nome, senha, 'login')
+
+                if deuCerto == True:
+                    #User area = Área do usuário com os horários e coisas para editar
+                    session['nome'] = nome
+                    return render_template('userArea.html')
+                
+                else:
+                    error = 'Erro! Usuário ou senha incorretos!'
+                    return render_template('login_register.html', error=error)
+
+            else:
+                error = 'Por favor, preencha todos os campos!'
+                return render_template('login_register.html', error=error)
+
+@app.route('/remedios', methods=['POST'])
+def remedios():
+    if request.method == 'POST':
+        pass
 
 @app.route('/logout', methods=['POST'])
 def logout():
+    pass
+
+@app.route('/deleteAccount', methods=["POST"])
+def deleteAccount():
     pass
 
 @app.route('/')
