@@ -6,16 +6,48 @@
     <link rel="stylesheet" href="/static/css/userArea.css">
 {% endblock %}
 
-{% block content %}
-    <header>
+{% block content %} 
+    <header class="d-flex justify-content-around p-5">
+        <div class="logo">
+            <img src="" alt="LogoDosador">
+        </div>
 
+        <div class="botoes">
+            <div class="dropdown-center">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Opções
+                </button>
+
+                <ul class="dropdown-menu">
+                    <form action="/logout" method="POST">
+                        <li><button class="dropdown-item" type="submit">Logout</button></li>
+                    </form>
+                    <li><a class="dropdown-item" href="/deleteRemedios">Deletar Remédios</a></li>
+                    <li><a class="dropdown-item" href="/deleteAccount">Deletar conta</a></li>
+                </ul>
+            </div>
+        </div>
     </header>
 
     <main>
+        {% if errro %}
+            <div class="error-area">
+                <p class="alert alert-danger">{{ error }}</p>
+            </div>
+        {% endif %}
+
         {% if session['temHorarios'] %}
             <!-- Mostrar os horários de remédio puxando do banco de dados -->
 
+            <div class="main-remedios d-flex justify-content-center align-items-center">
+                <div class="title container mt-5 text-center">
+                    <p class="h3">Seus horários de remédios:</p>
+                </div>
 
+                <div class="show-remedios">
+
+                </div>
+            </div>
         {% else %}
             <div class="main">
                 <!-- Mostrar opção para adicionar horários de remédios -->
@@ -27,34 +59,34 @@
                             <div class="horarios">
                                 <div class="row">
                                     <div class="col">
-                                        <p class="h4 mb-3 horario-p">Remédio 1:</p>
+                                        <p class="h5 mb-3 horario-p">Remédio 1 - Compartimento 1</p>
                                     </div>
 
                                     <div class="col">
                                         <div class="form-check form-switch d-flex justify-content-center gap-2 align-items-center">
-                                            <input class="form-check-input" type="checkbox" name="ativar" value="yes" checked>
+                                            <input class="form-check-input" type="checkbox" name="ativar1" value="yes" checked>
                                             <label class="form-check-label" for="mySwitch">Ativar</label>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="nome-remedio form-floating mt-3 mb-3">
-                                    <input type="text" name="nome_remedio[0]" class="form-control">
+                                    <input type="text" name="nome_remedio1" class="form-control">
                                     <label for="nome-remedio">Nome do remédio</label>
                                 </div>
 
                                 <div class="horario1 form-floating">
-                                    <input type="time" name="remedio[0][]" class="form-control">
+                                    <input type="time" name="remedio1Hora1" class="form-control">
                                     <label for="horario1">Primeiro horário:</label>
                                 </div>
 
                                 <div class="horario2 form-floating mt-3 mb-3">
-                                    <input type="time" name="remedio[0][]" class="form-control">
+                                    <input type="time" name="remedio1Hora2" class="form-control">
                                     <label for="horario2">Segundo horário:</label>
                                 </div>
 
                                 <div class="horario3 form-floating">
-                                    <input type="time" name="remedio[0][]" class="form-control">
+                                    <input type="time" name="remedio1Hora3" class="form-control">
                                     <label for="horario3">Terceiro horário:</label>
                                 </div>
                             </div>
@@ -62,12 +94,12 @@
                             <div class="horarios mt-5">
                                 <div class="row">
                                     <div class="col">
-                                        <p class="h4 mb-3 horario-p">Remédio 2:</p>
+                                        <p class="h5 mb-3 horario-p">Remédio 2 - Compartimento 2</p>
                                     </div>
 
                                     <div class="col">
                                         <div class="form-check form-switch d-flex justify-content-center gap-2 align-items-center">
-                                            <input class="form-check-input" type="checkbox" name="ativar" value="yes">
+                                            <input class="form-check-input" type="checkbox" name="ativar2" value="yes">
                                             <label class="form-check-label" for="mySwitch">Ativar</label>
                                         </div>
                                     </div>
@@ -97,12 +129,12 @@
                             <div class="horarios mt-5">
                                 <div class="row">
                                     <div class="col">
-                                        <p class="h4 mb-3 horario-p">Remédio 3:</p>
+                                        <p class="h5 mb-3 horario-p">Remédio 3 - Compartimento 3</p>
                                     </div>
 
                                     <div class="col">
                                         <div class="form-check form-switch d-flex justify-content-center gap-2 align-items-center">
-                                            <input class="form-check-input" type="checkbox" name="ativar" value="yes">
+                                            <input class="form-check-input" type="checkbox" name="ativar3" value="yes">
                                             <label class="form-check-label" for="mySwitch">Ativar</label>
                                         </div>
                                     </div>
@@ -132,12 +164,12 @@
                             <div class="horarios mt-5">
                                 <div class="row">
                                     <div class="col">
-                                        <p class="h4 mb-3 horario-p">Remédio 4:</p>
+                                        <p class="h5 mb-3 horario-p">Remédio 4 - Compartimento 4</p>
                                     </div>
 
                                     <div class="col">
                                         <div class="form-check form-switch d-flex justify-content-center gap-2 align-items-center">
-                                            <input class="form-check-input" type="checkbox" name="ativar" value="yes">
+                                            <input class="form-check-input" type="checkbox" name="ativar4" value="yes">
                                             <label class="form-check-label" for="mySwitch">Ativar</label>
                                         </div>
                                     </div>

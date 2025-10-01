@@ -131,10 +131,31 @@ def login_register():
 @app.route('/remedios', methods=['POST'])
 def remedios():
     if request.method == 'POST':
-        pass
+        id_dono = session['id_dono']
+        error = None
+        if request.form.get('ativar1') == 'yes':
+            nomeRemedio1 = request.form.get('nome_remedio1')
+            remedio1hora1 = request.form.get('remedio1Hora1')
+            remedio1hora2 = request.form.get('remedio1Hora2')
+            remedio1hora3 = request.form.get('remedio1Hora3')
+
+            deu_certo = banco_remedio(nomeRemedio1, id_dono, remedio1hora1, remedio1hora2, remedio1hora3)
+
+            if deu_certo == False:
+                error = 'Algo de ruim aconteceu!'
+                return render_template('userArea.html', error=error)
+            
+            else:
+                session['temHorarios'] = True
+                return render_template('userArea.html')
 
 @app.route('/logout', methods=['POST'])
 def logout():
+    session.clear()
+    return render_template('connect.html')
+
+@app.route('/deleteRemedios', methods=['POST'])
+def deleteRemedios():
     pass
 
 @app.route('/deleteAccount', methods=["POST"])
