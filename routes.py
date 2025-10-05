@@ -132,22 +132,73 @@ def login_register():
 def remedios():
     if request.method == 'POST':
         id_dono = session['id_dono']
-        error = None
+        erros = []
+        sucesso = False
+
+        # Compartimento 1
         if request.form.get('ativar1') == 'yes':
-            nomeRemedio1 = request.form.get('nome_remedio1')
-            remedio1hora1 = request.form.get('remedio1Hora1')
-            remedio1hora2 = request.form.get('remedio1Hora2')
-            remedio1hora3 = request.form.get('remedio1Hora3')
+            nome = request.form.get('nome_remedio1')
+            h1 = request.form.get('remedio1hora1')
+            h2 = request.form.get('remedio1hora2')
+            h3 = request.form.get('remedio1hora3')
+            deu_certo = banco_remedio(nome, id_dono, 1, h1, h2, h3)
 
-            deu_certo = banco_remedio(nomeRemedio1, id_dono, remedio1hora1, remedio1hora2, remedio1hora3)
+            if deu_certo == True:
+                sucesso = True
 
-            if deu_certo == False:
-                error = 'Algo de ruim aconteceu!'
-                return render_template('userArea.html', error=error)
-            
             else:
-                session['temHorarios'] = True
-                return render_template('userArea.html')
+                erros.append(f"Compartimento 1: {deu_certo}")
+
+        # Compartimento 2
+        if request.form.get('ativar2') == 'yes':
+            nome = request.form.get('nome_remedio2')
+            h1 = request.form.get('remedio2hora1')
+            h2 = request.form.get('remedio2hora2')
+            h3 = request.form.get('remedio2hora3')
+            deu_certo = banco_remedio(nome, id_dono, 2, h1, h2, h3)
+
+            if deu_certo == True:
+                sucesso = True
+
+            else:
+                erros.append(f"Compartimento 2: {deu_certo}")
+
+        # Compartimento 3
+        if request.form.get('ativar3') == 'yes':
+            nome = request.form.get('nome_remedio3')
+            h1 = request.form.get('remedio3hora1')
+            h2 = request.form.get('remedio3hora2')
+            h3 = request.form.get('remedio3hora3')
+            deu_certo = banco_remedio(nome, id_dono, 3, h1, h2, h3)
+
+            if deu_certo == True:
+                sucesso = True
+
+            else:
+                erros.append(f"Compartimento 3: {deu_certo}")
+
+        # Compartimento 4
+        if request.form.get('ativar4') == 'yes':
+            nome = request.form.get('nome_remedio4')
+            h1 = request.form.get('remedio4hora1')
+            h2 = request.form.get('remedio4hora2')
+            h3 = request.form.get('remedio4hora3')
+            deu_certo = banco_remedio(nome, id_dono, 4, h1, h2, h3)
+
+            if deu_certo == True:
+                sucesso = True
+
+            else:
+                erros.append(f"Compartimento 4: {deu_certo}")
+
+        if sucesso:
+            session['temHorarios'] = True
+
+        if erros:
+            return render_template('userArea.html', error='<br>'.join(erros))
+        
+        else:
+            return render_template('userArea.html', success="Remédios cadastrados com sucesso!")
 
 @app.route('/logout', methods=['POST'])
 def logout():
