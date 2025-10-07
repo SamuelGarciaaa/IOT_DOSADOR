@@ -119,3 +119,14 @@ def deleteRemediosBanco():
 
     conn.commit()
     conn.close()    
+
+def deleteAccountBanco():
+    id_dono = session['id_dono']
+
+    conn = sqlite3.connect('database.db')
+
+    conn.execute('DELETE FROM usuarios WHERE id = ?', (id_dono,))
+    conn.execute('DELETE FROM compartimentos WHERE id_dono = ?', (id_dono))
+
+    conn.commit()
+    conn.close()
