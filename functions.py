@@ -10,7 +10,7 @@ def banco(nome, senha, metodo, tel=None):
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS usuarios(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT NOT NULL UNIQUE,
+            nome TEXT NOT NULL,
             telefone TEXT,
             senha TEXT NOT NULL
         )
@@ -85,27 +85,21 @@ def banco_remedio(nomeRemedio, id_dono, id_compartimento, hora1='Não definido',
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
 
-    # 🔹 Cria o compartimento se não existir ainda para esse dono
-    cursor.execute('SELECT 1 FROM compartimentos WHERE id_compartimento = ? AND id_dono = ?', (id_compartimento, id_dono))
-    if not cursor.fetchone():
-        cursor.execute('INSERT INTO compartimentos (id_compartimento, id_dono) VALUES (?, ?)', (id_compartimento, id_dono))
-        conn.commit()
-
-    # 🔹 Verifica se já existe um remédio neste compartimento
+    # Verifica se já existe um remédio neste compartimento
     cursor.execute('SELECT COUNT(*) AS total FROM remedios WHERE id_compartimento = ? AND id_dono = ?', (id_compartimento, id_dono))
     total_no_compartimento = cursor.fetchone()['total']
     if total_no_compartimento > 0:
         conn.close()
         return "Este compartimento já contém um remédio"
 
-    # 🔹 Verifica se o dono já possui 4 remédios no total
+    # Verifica se o dono já possui 4 remédios no total
     cursor.execute('SELECT COUNT(*) AS total FROM remedios WHERE id_dono = ?', (id_dono,))
     total = cursor.fetchone()['total']
     if total >= 4:
         conn.close()
         return "Limite de 4 remédios por usuário atingido"
 
-    # 🔹 Insere o remédio
+    # Insere a bosta do remédio
     cursor.execute('''
         INSERT INTO remedios (nome, id_dono, id_compartimento, hora1, hora2, hora3)
         VALUES (?, ?, ?, ?, ?, ?)
@@ -114,3 +108,14 @@ def banco_remedio(nomeRemedio, id_dono, id_compartimento, hora1='Não definido',
     conn.commit()
     conn.close()
     return True
+
+def deleteRemediosBanco():
+    id_dono = session['id_dono']
+    conn = sqlite3.connect('database.db')
+    
+    conn.execute('DELETE FROM remedios WHERE id_dono = ?', (id_dono,))
+
+    session.pop('temHorarios', None)
+
+    conn.commit()
+    conn.close()    

@@ -7,9 +7,9 @@
 {% endblock %}
 
 {% block content %} 
-    <header class="d-flex justify-content-around p-5">
+    <header class="d-flex justify-content-around p-3 mt-0">
         <div class="logo">
-            <img src="" alt="LogoDosador">
+            <img src="/static/img/Maleta_Medica-removebg-preview.png" alt="LogoDosador">
         </div>
 
         <div class="botoes">
@@ -22,7 +22,9 @@
                     <form action="/logout" method="POST">
                         <li><button class="dropdown-item" type="submit">Logout</button></li>
                     </form>
-                    <li><a class="dropdown-item" href="/deleteRemedios">Deletar Remédios</a></li>
+                    <form action="/deleteRemedios" method="POST">
+                        <li><button class="dropdown-item" type="submit">Deletar Remédios</button></li>
+                    </form>
                     <li><a class="dropdown-item" href="/deleteAccount">Deletar conta</a></li>
                 </ul>
             </div>

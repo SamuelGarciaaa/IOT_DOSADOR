@@ -207,7 +207,13 @@ def logout():
 
 @app.route('/deleteRemedios', methods=['POST'])
 def deleteRemedios():
-    pass
+    deuCerto = deleteRemediosBanco()
+
+    if deuCerto == True:
+        pass
+
+    else:
+        return render_template('userArea.html', error='')
 
 @app.route('/deleteAccount', methods=["POST"])
 def deleteAccount():
