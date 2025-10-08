@@ -130,3 +130,8 @@ def deleteAccountBanco():
 
     conn.commit()
     conn.close()
+
+def getDataFromBd():
+    conn = sqlite3.connect('database.db')
+    id_dono = session['id_dono']
+    return conn.execute('SELECT FROM remedios WHERE id_dono = ?', id_dono)

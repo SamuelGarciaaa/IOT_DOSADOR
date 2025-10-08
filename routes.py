@@ -118,6 +118,7 @@ def login_register():
                 if deuCerto == True:
                     #User area = Área do usuário com os horários e coisas para editar
                     session['nome'] = nome
+                    session['temHorarios'] = True
                     return render_template('userArea.html')
                 
                 else:
@@ -215,6 +216,23 @@ def deleteAccount():
 
     session.clear()
     return render_template('connect.html')
+
+@app.route('/mandarTudo', methods=['POST'])
+def mandarTudo():
+    if request.method == 'POST':
+        dataFromDb = getDataFromBd()
+        
+        if dataFromDb:
+            # Começa a lançar o 'sinal' para o esp32
+            try:
+                data = request.get_json()
+                message = data.get('message')
+                
+                if message == 'pleaseDaddy':
+                    return jsonify({'status': 'success', 'message': dataFromDb}), 201
+                
+            except Exception as e:
+                print(e)
 
 @app.route('/')
 def index():
