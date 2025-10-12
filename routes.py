@@ -220,19 +220,23 @@ def deleteAccount():
 @app.route('/mandarTudo', methods=['POST'])
 def mandarTudo():
     if request.method == 'POST':
-        dataFromDb = getDataFromBd()
-        
-        if dataFromDb:
-            # Começa a lançar o 'sinal' para o esp32
-            try:
-                data = request.get_json()
-                message = data.get('message')
+        # Começa a lançar o 'sinal' para o esp32
+        try:
+            data = request.get_json()
+            message = data.get('message')
+            
+            if message == 'pleaseDaddy':
+                dataFromDb = getDataFromBd()
                 
-                if message == 'pleaseDaddy':
-                    return jsonify({'status': 'success', 'message': dataFromDb}), 201
+                if dataFromDb:
+                    return jsonify({'status': 'success', 'message': dataFromDb}), 200
                 
-            except Exception as e:
-                print(e)
+                else:
+                    return jsonify({'status': 'error', 'message': 'There is nothing'}), 400
+            
+        except Exception as e:
+            print(e)
+            return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/')
 def index():

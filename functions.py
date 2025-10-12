@@ -112,8 +112,9 @@ def banco_remedio(nomeRemedio, id_dono, id_compartimento, hora1='Não definido',
 def deleteRemediosBanco():
     id_dono = session['id_dono']
     conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
     
-    conn.execute('DELETE FROM remedios WHERE id_dono = ?', (id_dono,))
+    cursor.execute('DELETE FROM remedios WHERE id_dono = ?', (id_dono,))
 
     session.pop('temHorarios', None)
 
@@ -124,14 +125,34 @@ def deleteAccountBanco():
     id_dono = session['id_dono']
 
     conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
 
-    conn.execute('DELETE FROM usuarios WHERE id = ?', (id_dono,))
-    conn.execute('DELETE FROM compartimentos WHERE id_dono = ?', (id_dono))
+    cursor.execute('DELETE FROM usuarios WHERE id = ?', (id_dono,))
+    cursor.execute('DELETE FROM compartimentos WHERE id_dono = ?', (id_dono))
 
     conn.commit()
     conn.close()
 
 def getDataFromBd():
     conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
     id_dono = session['id_dono']
-    return conn.execute('SELECT FROM remedios WHERE id_dono = ?', id_dono)
+    cursor.execute('SELECT nome, hora1, hora2, hora3 FROM remedios WHERE id_dono = ?', (id_dono,))
+    rows = cursor.fetchall()
+    conn.close()
+
+    data_list = []
+    for row in rows:
+        horas = []
+        for h in [row['hora1'], row['hora2'], row['hora3']]:
+            if h and h != 'Não definido':
+                horas.append(h)
+
+        data_list.append({
+            'nome': row['nome'],
+            'horas': horas
+        })
+
+    return data_list
