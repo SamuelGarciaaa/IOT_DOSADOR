@@ -10,9 +10,10 @@ const int daylightOffset_sec = 0;
 
 char codigo_user[9];
 bool deuCertoConexao = false;
+bool alarmeTocado = false;
 
-const char* ssid = "DESKTOP-9O2UAPP 9491";
-const char* password = "24n783@D";  
+const char* ssid = "Amigo Luci";
+const char* password = "30081967";  
 
 WiFiServer server(80);
 
@@ -41,7 +42,7 @@ void setup(){
   HTTPClient http;
   WiFiClient client;
 
-  http.begin(client, "http://192.168.0.104:5000/data");
+  http.begin(client, "http://192.168.3.14:5000/data");
   http.addHeader("Content-Type", "application/json");
 
   StaticJsonDocument<200> doc;
@@ -73,36 +74,28 @@ void setup(){
 }
 
 void tocarAlarme(const char* nome){
-  Serial.print("⏰ Alarme do remédio: ");
+  Serial.print("Alarme do remédio: ");
   Serial.println(nome);
+
+  //Funcao dos negocio girar
 }
 
-void loop(){
-  if(deuCertoConexao){
+void loop() {
+  if(deuCertoConexao) {
     HTTPClient http;
     WiFiClient client;
 
-    http.begin(client, "http://192.168.0.104:5000/mandarTudo");
-
-    // Cabeçalho correto para JSON
+    http.begin(client, "http://192.168.3.14:5000/mandarTudo");
     http.addHeader("Content-Type", "application/json");
 
-    // Criar JSON
+    // Cria JSON para enviar
     StaticJsonDocument<200> doc;
     doc["message"] = "pleaseDaddy";
 
     String payload;
     serializeJson(doc, payload);
 
-    // DEBUG: imprime o JSON que será enviado
-    Serial.println("JSON a ser enviado:");
-    Serial.println(payload);
-    Serial.print("Tamanho do payload: ");
-    Serial.println(payload.length());
-
-    // POST enviando o corpo corretamente
     int httpResponseCode = http.POST((uint8_t*)payload.c_str(), payload.length());
-
     if (httpResponseCode > 0) {
       String response = http.getString();
       Serial.println("Resposta do servidor:");
@@ -119,6 +112,8 @@ void loop(){
           char horaAtual[6];
           sprintf(horaAtual, "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
 
+          bool alarmeDisparadoNoLoop = false;
+
           for (JsonObject rem : remedios) {
             const char* nome = rem["nome"];
             JsonArray horas = rem["horas"].as<JsonArray>();
@@ -126,15 +121,21 @@ void loop(){
             for (JsonVariant h : horas) {
               const char* horaDb = h.as<const char*>();
               if (strcmp(horaDb, horaAtual) == 0) {
-                tocarAlarme(nome);
+                if (!alarmeTocado) {
+                  tocarAlarme(nome);
+                  alarmeDisparadoNoLoop = true;
+                }
               }
             }
           }
+
+          // Atualiza flag para não repetir o alarme no mesmo minuto
+          alarmeTocado = alarmeDisparadoNoLoop;
+          if (!alarmeDisparadoNoLoop) alarmeTocado = false;
         }
       } else {
         Serial.println("Erro ao interpretar JSON ou status inválido.");
       }
-
     } else {
       Serial.print("Erro no POST: ");
       Serial.println(http.errorToString(httpResponseCode).c_str());
@@ -143,5 +144,5 @@ void loop(){
     http.end();
   }
 
-  delay(5000);
+  delay(5000); // Verifica a cada 5 segundos
 }

@@ -113,7 +113,7 @@ def userArea():
 
 @app.route('/remedios', methods=['POST'])
 def remedios():
-    id_dono = session['id_dono']
+    id_dono = get_id_dono_atual()
 
     if request.method == 'POST':
         erros = []
@@ -186,17 +186,14 @@ def remedios():
 
 @app.route('/logout', methods=['POST'])
 def logout():
+    global id_dono_variavel
+    id_dono_variavel = None
     session.clear()
     return render_template('connect.html')
 
-@app.route('/deleteRemedios', methods=['POST'])
-def deleteRemedios():
-    id_dono = session['id_dono']
-    deleteRemediosBanco(id_dono)
-
 @app.route('/deleteAccount', methods=["POST"])
 def deleteAccount():
-    id_dono = session['id_dono']
+    id_dono = get_id_dono_atual()
     deleteAccountBanco(id_dono)
 
     session.clear()
@@ -204,7 +201,7 @@ def deleteAccount():
 
 @app.route('/mandarTudo', methods=['POST'])
 def mandarTudo():
-    id_dono = session['id_dono']
+    id_dono = get_id_dono_atual()
     print(id_dono)
 
     try:

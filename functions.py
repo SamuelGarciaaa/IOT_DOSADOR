@@ -1,7 +1,12 @@
 import sqlite3
 from flask import session
 
+global id_dono_variavel
+id_dono_variavel = None
+
 def banco(nome, senha, metodo, tel=None):
+    global id_dono_variavel
+
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row  # permite acessar colunas por nome
     conn.execute("PRAGMA foreign_keys = ON")
@@ -55,6 +60,7 @@ def banco(nome, senha, metodo, tel=None):
         # Pega o id recém-criado
         id_dono = cursor.lastrowid
         session['id_dono'] = id_dono
+        id_dono_variavel = id_dono
 
         for _ in range(4):
             cursor.execute('INSERT INTO compartimentos (id_dono) VALUES (?)', (id_dono,))
@@ -73,6 +79,7 @@ def banco(nome, senha, metodo, tel=None):
         if row:
             id_dono = row['id']
             session['id_dono'] = id_dono
+            id_dono_variavel = id_dono
             conn.close()
             return True
         else:
@@ -109,23 +116,14 @@ def banco_remedio(nomeRemedio, id_dono, id_compartimento, hora1='Não definido',
     conn.close()
     return True
 
-def deleteRemediosBanco(id_dono):
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    
-    cursor.execute('DELETE FROM remedios WHERE id_dono = ?', (id_dono,))
-
-    session.pop('temHorarios', None)
-
-    conn.commit()
-    conn.close()    
-
 def deleteAccountBanco(id_dono):
     conn = sqlite3.connect('database.db')
+    conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
 
+    cursor.execute('DELETE FROM remedios WHERE id_dono = ?', (id_dono,))
+    cursor.execute('DELETE FROM compartimentos WHERE id_dono = ?', (id_dono,))
     cursor.execute('DELETE FROM usuarios WHERE id = ?', (id_dono,))
-    cursor.execute('DELETE FROM compartimentos WHERE id_dono = ?', (id_dono))
 
     conn.commit()
     conn.close()
@@ -154,3 +152,7 @@ def getDataFromBd(id_dono):
 
     print("Data retornada do banco:", data_list)
     return data_list
+
+def get_id_dono_atual():
+    global id_dono_variavel
+    return id_dono_variavel
