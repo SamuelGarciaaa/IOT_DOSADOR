@@ -72,67 +72,50 @@ def inputToken():
 
 @app.route('/login_register', methods=['POST'])
 def login_register():
-    if request.method == 'POST':
-        #Erro
-        error = None
+    error = None
 
-        #Variáveis
-        variavelQueDizOqueEstamosUsando = request.form.get('variableToTellWhatWeAreUsing')
+    variavelQueDizOqueEstamosUsando = request.form.get('variableToTellWhatWeAreUsing')
+    nome = request.form.get('nome')
+    senha = request.form.get('senha')
 
-        nome = request.form.get('nome')
-        senha = request.form.get('senha')
+    if variavelQueDizOqueEstamosUsando == 'register':
+        tel = request.form.get('tel')
 
-        if variavelQueDizOqueEstamosUsando == 'register':
-            #Opção registrar
-            tel = request.form.get('tel')
-            
-            if tel and tel.strip() and nome and nome.strip() and senha and senha.strip():
-                #Preencheu tudo
-
-                deuCerto = banco(nome, senha, 'cadastro', tel)
-
-                if deuCerto == True:
-                    #User area = Área do usuário com os horários e coisas para editar
-                    session['nome'] = nome
-                    return render_template('userArea.html')
-                
-                elif deuCerto == False:
-                    error = 'Já existe um usuário com esse nome!'
-                    return render_template('login_register.html', error=error)
-
-                else:
-                    error = 'Algo deu errado! Tente novamente.'
-                    return render_template('login_register.html', error=error)
-
-            else:
-                error = 'Por favor, preencha todos os campos!'
-                return render_template('login_register.html', error=error)
-
+        if not (tel and tel.strip() and nome and nome.strip() and senha and senha.strip()):
+            error = 'Por favor, preencha todos os campos!'
         else:
-            #Opção logar
-            if nome and nome.strip() and senha and senha.strip():
-                #Preencheu tudo
-
-                deuCerto = banco(nome, senha, 'login')
-
-                if deuCerto == True:
-                    #User area = Área do usuário com os horários e coisas para editar
-                    session['nome'] = nome
-                    session['temHorarios'] = True
-                    return render_template('userArea.html')
-                
-                else:
-                    error = 'Erro! Usuário ou senha incorretos!'
-                    return render_template('login_register.html', error=error)
-
+            deuCerto = banco(nome, senha, 'cadastro', tel)
+            if deuCerto == True:
+                session['nome'] = nome
+                return redirect(url_for('userArea'))
+            elif deuCerto == False:
+                error = 'Já existe um usuário com esse nome!'
             else:
-                error = 'Por favor, preencha todos os campos!'
-                return render_template('login_register.html', error=error)
+                error = 'Algo deu errado! Tente novamente.'
+
+    else:
+        if not (nome and nome.strip() and senha and senha.strip()):
+            error = 'Por favor, preencha todos os campos!'
+        else:
+            deuCerto = banco(nome, senha, 'login')
+            if deuCerto == True:
+                session['nome'] = nome
+                session['temHorarios'] = True
+                return redirect(url_for('userArea'))
+            else:
+                error = 'Erro! Usuário ou senha incorretos!'
+
+    return render_template('login_register.html', error=error)
+
+@app.route('/userArea')
+def userArea():
+    return render_template('userArea.html')
 
 @app.route('/remedios', methods=['POST'])
 def remedios():
+    id_dono = session['id_dono']
+
     if request.method == 'POST':
-        id_dono = session['id_dono']
         erros = []
         sucesso = False
 
@@ -208,35 +191,37 @@ def logout():
 
 @app.route('/deleteRemedios', methods=['POST'])
 def deleteRemedios():
-    deleteRemediosBanco()
+    id_dono = session['id_dono']
+    deleteRemediosBanco(id_dono)
 
 @app.route('/deleteAccount', methods=["POST"])
 def deleteAccount():
-    deleteAccountBanco()
+    id_dono = session['id_dono']
+    deleteAccountBanco(id_dono)
 
     session.clear()
     return render_template('connect.html')
 
 @app.route('/mandarTudo', methods=['POST'])
 def mandarTudo():
-    if request.method == 'POST':
-        # Começa a lançar o 'sinal' para o esp32
-        try:
-            data = request.get_json()
-            message = data.get('message')
+    id_dono = session['id_dono']
+    print(id_dono)
+
+    try:
+        data = request.get_json(force=True)
+        message = data.get('message')
+        
+        if message == "pleaseDaddy":
+            dataFromDb = getDataFromBd(id_dono)
+            print(dataFromDb)
             
-            if message == 'pleaseDaddy':
-                dataFromDb = getDataFromBd()
-                
-                if dataFromDb:
-                    return jsonify({'status': 'success', 'message': dataFromDb}), 200
-                
-                else:
-                    return jsonify({'status': 'error', 'message': 'There is nothing'}), 400
+            return jsonify({
+                'status': 'success',
+                'message': dataFromDb
+            }), 200
             
-        except Exception as e:
-            print(e)
-            return jsonify({'status': 'error', 'message': str(e)}), 500
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/')
 def index():

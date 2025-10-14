@@ -109,8 +109,7 @@ def banco_remedio(nomeRemedio, id_dono, id_compartimento, hora1='Não definido',
     conn.close()
     return True
 
-def deleteRemediosBanco():
-    id_dono = session['id_dono']
+def deleteRemediosBanco(id_dono):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     
@@ -121,9 +120,7 @@ def deleteRemediosBanco():
     conn.commit()
     conn.close()    
 
-def deleteAccountBanco():
-    id_dono = session['id_dono']
-
+def deleteAccountBanco(id_dono):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
@@ -133,13 +130,13 @@ def deleteAccountBanco():
     conn.commit()
     conn.close()
 
-def getDataFromBd():
+def getDataFromBd(id_dono):
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
 
-    id_dono = session['id_dono']
-    cursor.execute('SELECT nome, hora1, hora2, hora3 FROM remedios WHERE id_dono = ?', (id_dono,))
+    cursor.execute('''SELECT nome, hora1, hora2, hora3 FROM remedios WHERE id_dono = ?''', (id_dono,))
     rows = cursor.fetchall()
     conn.close()
 
@@ -148,11 +145,12 @@ def getDataFromBd():
         horas = []
         for h in [row['hora1'], row['hora2'], row['hora3']]:
             if h and h != 'Não definido':
-                horas.append(h)
+                horas.append(str(h))
 
         data_list.append({
-            'nome': row['nome'],
+            'nome': str(row['nome']),
             'horas': horas
         })
 
+    print("Data retornada do banco:", data_list)
     return data_list

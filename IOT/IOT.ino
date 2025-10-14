@@ -11,8 +11,8 @@ const int daylightOffset_sec = 0;
 char codigo_user[9];
 bool deuCertoConexao = false;
 
-const char* ssid = "Amigo Luci";
-const char* password = "30081967";  
+const char* ssid = "DESKTOP-9O2UAPP 9491";
+const char* password = "24n783@D";  
 
 WiFiServer server(80);
 
@@ -41,7 +41,7 @@ void setup(){
   HTTPClient http;
   WiFiClient client;
 
-  http.begin(client, "http://192.168.3.14:5000/data");
+  http.begin(client, "http://192.168.0.104:5000/data");
   http.addHeader("Content-Type", "application/json");
 
   StaticJsonDocument<200> doc;
@@ -82,18 +82,28 @@ void loop(){
     HTTPClient http;
     WiFiClient client;
 
-    http.begin(client, "http://192.168.3.14:5000/mandarTudo");
+    http.begin(client, "http://192.168.0.104:5000/mandarTudo");
+
+    // Cabeçalho correto para JSON
     http.addHeader("Content-Type", "application/json");
 
+    // Criar JSON
     StaticJsonDocument<200> doc;
     doc["message"] = "pleaseDaddy";
 
     String payload;
     serializeJson(doc, payload);
 
-    int httpResponseCode = http.POST(payload);
+    // DEBUG: imprime o JSON que será enviado
+    Serial.println("JSON a ser enviado:");
+    Serial.println(payload);
+    Serial.print("Tamanho do payload: ");
+    Serial.println(payload.length());
 
-    if(httpResponseCode > 0){
+    // POST enviando o corpo corretamente
+    int httpResponseCode = http.POST((uint8_t*)payload.c_str(), payload.length());
+
+    if (httpResponseCode > 0) {
       String response = http.getString();
       Serial.println("Resposta do servidor:");
       Serial.println(response);
@@ -101,36 +111,32 @@ void loop(){
       StaticJsonDocument<2048> resDoc;
       DeserializationError error = deserializeJson(resDoc, response);
 
-      if(!error && resDoc["status"] == "success"){
+      if (!error && String(resDoc["status"].as<const char*>()) == "success") {
         JsonArray remedios = resDoc["message"].as<JsonArray>();
 
         struct tm timeinfo;
-        if(getLocalTime(&timeinfo)){
+        if (getLocalTime(&timeinfo)) {
           char horaAtual[6];
           sprintf(horaAtual, "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
 
-          for(JsonObject rem : remedios){
+          for (JsonObject rem : remedios) {
             const char* nome = rem["nome"];
             JsonArray horas = rem["horas"].as<JsonArray>();
 
-            for(JsonVariant h : horas){
+            for (JsonVariant h : horas) {
               const char* horaDb = h.as<const char*>();
-
-              if(strcmp(horaDb, horaAtual) == 0){
+              if (strcmp(horaDb, horaAtual) == 0) {
                 tocarAlarme(nome);
               }
             }
           }
         }
-      }
-      
-      else{
+      } else {
         Serial.println("Erro ao interpretar JSON ou status inválido.");
       }
-    }
-    
-    else{
-      Serial.print("Erro no POST dos horários: ");
+
+    } else {
+      Serial.print("Erro no POST: ");
       Serial.println(http.errorToString(httpResponseCode).c_str());
     }
 
