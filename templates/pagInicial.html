@@ -1,0 +1,40 @@
+{% extends "/base.html" %}
+
+{% block title %} Àrea do usuário {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="/static/css/userArea.css">
+{% endblock %}
+
+{% block content %}
+
+    <header class="container-fluid d-flex justify-content-between" style="height: 100px; border-bottom: solid 2px rgb(0, 140, 255);">
+        <div class="ms-4">
+            <img src="static/img/Maleta_Medica-removebg-preview.png" alt="" style="width: 260px; height: 100px;">
+        </div>
+
+        <div class="botoes me-5 mt-4">
+            <div class="dropdown-center">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-list"></i> Opções
+                </button>
+
+                <ul class="dropdown-menu">
+                    <form action="/logout" method="POST">
+                        <li><button class="dropdown-item" type="submit"><i class="bi bi-box-arrow-right"></i> Logout</button></li>
+                    </form>
+                    <form action="/deleteAccount", method="POST">
+                        <li><button class="dropdown-item" type="submit"><i class="bi bi-person-x"></i> Deletar conta</button></li>
+                    </form>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main></main>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/js/userArea.js"></script>
+{% endblock %}

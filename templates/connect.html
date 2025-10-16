@@ -7,28 +7,75 @@
 {% endblock %}
 
 {% block content %}
-    <!-- ERROR AREA -->
 
-    {% if error %}
-        <div class="error-area container">
-            <p class="alert alert-danger text-center mt-5" role="alert">{{ error }}</p>
+    <header class="container-fluid" style="height: 100px; border-bottom: solid 2px rgb(0, 140, 255);">
+        <div>
+            <img src="static/img/Maleta_Medica-removebg-preview.png" alt="" style="width: 260px; height: 100px;" class="ms-4">
         </div>
-    {% endif %}
+    </header>
 
-    <div class="main-form container">
+    <div class="main-form d-flex justify-content-between mt-4">
+        <div class="">
+            <div class="ms-5">
+                <h1>Criadores do Projeto:</h1>
+            </div>
+            <div class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item ms-5 active">
+                        <img class="d-block" src="static/img/WhatsApp Image 2025-10-16 at 09.27.06 (2).jpeg" alt="First slide">
+                    </div>
+                    <div class="carousel-item ms-5">
+                        <img class="d-block" src="static/img/WhatsApp Image 2025-10-16 at 09.27.06.jpeg" alt="Second slide">
+                    </div>
+                    <div class="carousel-item ms-5">
+                        <img class="d-block" src="static/img/WhatsApp Image 2025-10-16 at 09.27.06 (3).jpeg" alt="Third slide">
+                    </div>
+                    <div class="carousel-item ms-5">
+                        <img class="d-block" src="static/img/WhatsApp Image 2025-10-16 at 09.27.06 (1).jpeg" alt="Fourth slide">
+                    </div>
+                </div>
+            </div>
+            <div class="mt-5 ms-5">
+                <h4>Turma 423</h4>
+                <br>
+                <h5>Samuel Garcia</h5>
+                <h5>Arthur Cassol</h5>
+                <h5>Guilherme Pons</54>
+                <h5>Lucas Vasseur</h5>
+            </div>
+        </div>
 
-        <!-- FORM AREA -->
-        <form action="/inputCode" method="POST">
-            <div class="form-floating mt-5">
-                <input type="text" name="token" class="form-control" placeholder="Entre com o token...">
-                <label for="token">Código de pareamento</label>
+        <div class="loginDiv p-5">
+            <h4>Confime o código da maleta:</h4>
+            <br><br>
+            <p style="margin: 0;">Entre com o código de pareamento:</p>
+
+            <!-- FORM AREA -->
+            <form action="/inputCode" method="POST">
+                <div class="form-floating mt-2">
+                    <input type="text" name="token" class="form-control" placeholder="Entre com o token...">
+                    <label for="token">Código de pareamento</label>
+                </div>
+        
+                <div class="send-data-area mt-5">
+                    <button class="btn btn-success" type="submit">Enviar</button>
+                    <button class="btn btn-danger" type="reset">Limpar campos</button>
+                </div>
+
+                <div>
+
+                    <!-- ERROR AREA -->
+                    {% if error %}
+                        <div class="error-area">
+                            <p class="alert alert-danger text-center mt-5" role="alert">{{ error }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </form>
+            <div>
+                <p class="text-secondary">Código verificado pela VMB (Verificação Muito Boa). Caso queira ter mais informações acerca da VMB, clique em <a href="">Saiba Mais</a></p>
             </div>
-    
-            <div class="send-data-area mt-5">
-                <button class="btn btn-success" type="submit">Enviar</button>
-                <button class="btn btn-danger" type="reset">Limpar campos</button>
-            </div>
-        </form>
+        </div>
     </div>
 {% endblock %}
 

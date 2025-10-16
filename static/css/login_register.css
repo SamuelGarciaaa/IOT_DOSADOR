@@ -1,0 +1,11 @@
+.loginDiv2{
+    width: 500px;
+    height: 700px;
+
+    margin-right: 150px;
+    border: solid rgba(128, 128, 128, 0.233) 1px;
+}
+.carousel-item img{
+    width: 400px;
+    height: 500px;
+}

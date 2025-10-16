@@ -134,7 +134,7 @@ def getDataFromBd(id_dono):
     conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
 
-    cursor.execute('''SELECT nome, hora1, hora2, hora3 FROM remedios WHERE id_dono = ?''', (id_dono,))
+    cursor.execute('''SELECT nome, hora1, hora2, hora3, id_compartimento FROM remedios WHERE id_dono = ?''', (id_dono,))
     rows = cursor.fetchall()
     conn.close()
 
@@ -147,6 +147,7 @@ def getDataFromBd(id_dono):
 
         data_list.append({
             'nome': str(row['nome']),
+            'compartimento' : int(row['id_compartimento']),
             'horas': horas
         })
 

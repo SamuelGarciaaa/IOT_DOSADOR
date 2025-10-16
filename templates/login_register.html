@@ -7,47 +7,93 @@
 {% endblock %}
 
 {% block content %}
-    <div class="main-form container mt-5 d-flex flex-column justify-content-center align-items-center">
-        <!-- ERROR AREA -->
-        {% if error %}
-            <div class="error-area container">
-                <p class="alert alert-danger text-center mt-5" role="alert">{{ error }}</p>
-            </div>
-        {% endif %}
-
-        <p class="h1 text-center" id="login_register_title">Criar uma conta</p>
-
-        <!-- FORM AREA -->
-        <form action="/login_register" method="POST" class="w-50">
-            <!-- Variável para falar o que estamos usando -->
-            <input type="hidden" name="variableToTellWhatWeAreUsing" id="variableToTellWhatWeAreUsing" value="register">
-
-            <div>
-                <!-- Passo 1 do formulário - Criação do usuário -->
-                <div class="form-floating mb-3 mt-3">
-                    <input type="text" name="nome" id="nome" placeholder="Nome" class="form-control" id="nome">
-                    <label for="nome">Nome</label>
-                </div>
+    <header class="container-fluid" style="height: 100px; border-bottom: solid 2px rgb(0, 140, 255);">
+        <div>
+            <img src="static/img/Maleta_Medica-removebg-preview.png" alt="" style="width: 260px; height: 100px;" class="ms-4">
+        </div>
+    </header>
     
-                <div class="form-floating mb-3 mt-3" id="hide-area">
-                    <input type="text" name="tel" id="tel" placeholder="Telefone" class="form-control" id="tel">
-                    <label for="tel">Telefone</label>
-                </div>
-    
-                <div class="form-floating mb-3 mt-3">
-                    <input type="text" name="senha" id="senha" placeholder="Senha" class="form-control" id="senha">
-                    <label for="senha">Senha do usuário</label>
+    <div class="main-form mt-5 d-flex justify-content-between">
+        <div class="">
+            <div class="ms-5">
+                <h1>Criadores do Projeto:</h1>
+            </div>
+            <div class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item ms-5 active">
+                        <img class="d-block" src="static/img/WhatsApp Image 2025-10-16 at 09.27.06 (2).jpeg" alt="First slide">
+                    </div>
+                    <div class="carousel-item ms-5">
+                        <img class="d-block" src="static/img/WhatsApp Image 2025-10-16 at 09.27.06.jpeg" alt="Second slide">
+                    </div>
+                    <div class="carousel-item ms-5">
+                        <img class="d-block" src="static/img/WhatsApp Image 2025-10-16 at 09.27.06 (3).jpeg" alt="Third slide">
+                    </div>
+                    <div class="carousel-item ms-5">
+                        <img class="d-block" src="static/img/WhatsApp Image 2025-10-16 at 09.27.06 (1).jpeg" alt="Fourth slide">
+                    </div>
                 </div>
             </div>
-
-            <!-- Botão de enviar para o login -->
-            <div class="div-enviar-login d-flex justify-content-center gap-5" id="hide-enviar-login">
-                <button class="btn btn-success w-25" type="submit">Enviar dados</button>
-                <button class="btn btn-danger w-25" type="reset">Limpar dados</button>
+            <div class="mt-4 ms-5">
+                <h4>Turma 423</h4>
+                <br>
+                <h5>Samuel Garcia</h5>
+                <h5>Arthur Cassol</h5>
+                <h5>Guilherme Pons</54>
+                <h5>Lucas Vasseur</h5>
             </div>
-        </form>
+        </div>
 
-        <button onclick="trocar_texto()" id="p_trocar" class="btn-link btn mt-3 mt-3">Já tem uma conta? Faça login</button>
+        <div class="loginDiv2" style="width: 490px;">
+            <p class="h1 text-center mt-3" id="login_register_title">Criar uma conta</p>
+
+            <!-- FORM AREA -->
+            <form action="/login_register" method="POST" class="w-75 ms-5 mb-3">
+                <!-- Variável para falar o que estamos usando -->
+                <input type="hidden" name="variableToTellWhatWeAreUsing" id="variableToTellWhatWeAreUsing" value="register">
+
+                <div>
+                    <!-- Passo 1 do formulário - Criação do usuário -->
+                    <div class="form-floating mb-3 mt-3">
+                        <input type="text" name="nome" id="nome" placeholder="Nome" class="form-control" id="nome">
+                        <label for="nome">Nome</label>
+                    </div>
+        
+                    <div class="form-floating mb-3 mt-3" id="hide-area">
+                        <input type="text" name="tel" id="tel" placeholder="Telefone" class="form-control" id="tel">
+                        <label for="tel">Telefone</label>
+                    </div>
+        
+                    <div class="form-floating mb-3 mt-3">
+                        <input type="text" name="senha" id="senha" placeholder="Senha" class="form-control" id="senha">
+                        <label for="senha">Senha do usuário</label>
+                    </div>
+                </div>
+
+                <!-- Botão de enviar para o login -->
+                <div class="div-enviar-login d-flex justify-content-center gap-5" id="hide-enviar-login">
+                    <button class="btn btn-success" type="submit">Enviar dados</button>
+                    <button class="btn btn-danger" type="reset">Limpar dados</button>
+                </div>
+                
+                <!-- ERROR AREA -->
+                {% if error %}
+                <div class="error-area container">
+                    <p class="alert alert-danger text-center mt-5" role="alert">{{ error }}</p>
+                </div>
+                {% endif %}
+
+            </form>
+            <div class="text-center">
+                <span><button onclick="trocar_texto()" id="p_trocar" class="btn btn-link" style="padding-left: 0;">Já tem uma conta? Faça login</button></span>
+            </div>
+            <div class="ms-2">
+                <p class="text-secondary">Código verificado pela VMB (Verificação Muito Boa). Caso queira ter mais informações acerca da VMB, clique em <a href="">Saiba Mais</a></p>
+            </div>
+
+        </div>
+
+
     </div>
 {% endblock %}
 
